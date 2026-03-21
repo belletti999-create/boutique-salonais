@@ -542,10 +542,7 @@
 
 <div class="grid" id="product-grid"></div>
 
-<!-- STRIPE NOTICE (à supprimer quand Stripe est configuré) -->
-<div class="stripe-notice" id="stripe-notice">
-  ⚙️ <strong>Configuration Stripe requise :</strong> Remplace la ligne <code>STRIPE_PAYMENT_LINK</code> dans le code par ton lien de paiement Stripe (crée-le sur <strong>dashboard.stripe.com → Payment Links</strong> avec un montant libre).
-</div>
+
 
 <div class="info-banner">
   🧊 <strong>Boissons à température ambiante</strong><br>
@@ -567,6 +564,10 @@
   <button class="btn-pay" id="btn-pay" onclick="checkout()" disabled>
     Procéder au paiement
   </button>
+  <div id="stripe-hint-box" style="display:none; margin-top:0.8rem; padding:0.8rem 1rem; background:rgba(200,160,122,0.08); border:1px solid rgba(200,160,122,0.25); border-radius:10px; font-size:0.75rem; color:#c8a07a; line-height:1.5; text-align:center;">
+    💳 Sur la page Stripe, saisissez exactement<br>
+    <strong id="stripe-amount-hint" style="font-size:1.2rem; display:block; margin-top:0.3rem;"></strong>
+  </div>
 </div>
 
 <!-- SUCCESS -->
@@ -584,7 +585,7 @@
   //    "code" = le code 5 chiffres de la serrure du tiroir
   // =============================================
   const PRODUCTS = [
-    { id: 1, emoji: '🥤', name: 'Coca-Cola',      desc: 'Pack de 2 canettes 33cl',             price: 4.50, tiroir: 1, code: '55555' },
+    { id: 1, emoji: '🥤', name: 'Coca-Cola',      desc: 'Pack de 2 canettes 33cl',             price: 4.50, tiroir: 1, code: '12345' },
     { id: 2, emoji: '🍟', name: 'Chips',           desc: 'Vico Chips Classique Nature',          price: 2.50, tiroir: 2, code: '23456' },
     { id: 3, emoji: '🍜', name: 'Soupe Chinoise',  desc: 'Pack de 2 nouilles instantanées poulet & bœuf', price: 5.00, tiroir: 3, code: '34567' },
     { id: 4, emoji: '🍬', name: "M&M's",           desc: "M&M's Peanut 200g",                    price: 5.00, tiroir: 4, code: '45678' },
@@ -700,6 +701,10 @@
       document.getElementById('drawer-total-amount').textContent = fmt(total);
       totalEl.style.display = 'flex';
       payBtn.disabled = false;
+
+      // Afficher le montant exact à saisir sur Stripe
+      document.getElementById('stripe-amount-hint').textContent = fmt(total);
+      document.getElementById('stripe-hint-box').style.display = 'block';
     }
 
     document.getElementById('overlay').classList.add('open');
@@ -717,8 +722,7 @@
     btnPay.disabled = true;
     btnPay.textContent = 'Chargement...';
 
-    // Sauvegarder le panier pour afficher les codes après paiement
-    localStorage.setItem('lappart_cart', JSON.stringify(keys.map(id => +id)));
+    sessionStorage.setItem('lappart_cart', JSON.stringify(keys.map(id => +id)));
 
     const items = keys.map(id => {
       const p = PRODUCTS.find(x => x.id === +id);
@@ -753,13 +757,12 @@
     const params = new URLSearchParams(window.location.search);
     if (params.get('commande') !== 'ok') return;
 
-    const savedIds = JSON.parse(localStorage.getItem('lappart_cart') || '[]');
+    const savedIds = JSON.parse(sessionStorage.getItem('lappart_cart') || '[]');
     if (savedIds.length === 0) return;
 
     const achetés = savedIds.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
-    localStorage.removeItem('lappart_cart');
+    sessionStorage.removeItem('lappart_cart');
 
-    // Construire l'écran de succès avec les codes
     const codesHTML = achetés.map(p => `
       <div class="code-card">
         <div class="code-product">${p.emoji || '🛒'} ${p.name}</div>
@@ -771,7 +774,6 @@
     document.getElementById('success-codes').innerHTML = codesHTML;
     document.getElementById('success-screen').classList.add('show');
 
-    // Nettoyer l'URL
     window.history.replaceState({}, '', '/');
   }
 

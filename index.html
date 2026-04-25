@@ -6,534 +6,131 @@
   <title>La Boutique · L'Appart Salonais</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:       #0d0806;
-      --surface:  #130d08;
-      --card:     #1c1108;
-      --card-h:   #241608;
-      --gold:     #c8a07a;
-      --gold-lt:  #e2c09a;
-      --gold-sh:  #f0d4b0;
-      --gold-dk:  #8a6448;
-      --gold-dim: rgba(200,160,122,0.12);
-      --gold-glow:rgba(200,160,122,0.22);
-      --border:   rgba(200,160,122,0.18);
-      --border-h: rgba(200,160,122,0.45);
-      --text:     #ede4d8;
-      --muted:    #6a5a50;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Lato', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 60% 45% at 85% 5%,  rgba(156,92,106,0.14) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 10% 90%, rgba(200,160,122,0.09) 0%, transparent 55%),
-        repeating-linear-gradient(45deg, transparent 0px, transparent 40px, rgba(200,160,122,0.012) 40px, rgba(200,160,122,0.012) 41px);
-    }
-
-    .top-banner {
-      position: relative; z-index: 10;
-      background: linear-gradient(90deg, #3a1f1a, #6a3528, #3a1f1a);
-      text-align: center; padding: 0.5rem 1rem;
-      font-family: 'Cinzel', serif; font-size: 0.52rem;
-      letter-spacing: 0.38em; text-transform: uppercase;
-      color: rgba(237,228,216,0.8); font-weight: 600;
-    }
-
-    header {
-      position: relative; z-index: 10;
-      text-align: center; padding: 2.4rem 1.5rem 1.2rem;
-    }
-
-    .crown { font-size: 1.6rem; color: var(--gold); margin-bottom: 0.8rem; display: block; filter: drop-shadow(0 0 12px var(--gold-glow)); }
-
-    .crest { display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-bottom: 0.8rem; }
-    .crest-line { flex: 1; max-width: 70px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
-    .crest-line.r { background: linear-gradient(90deg, var(--gold), transparent); }
-    .crest-dot { width: 5px; height: 5px; background: var(--gold); transform: rotate(45deg); }
-
-    header h1 {
-      font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 400;
-      letter-spacing: 0.1em; line-height: 1.2; color: var(--text);
-      text-shadow: 0 0 40px rgba(201,168,76,0.2);
-    }
-
-    header h1 .gold-line {
-      display: block; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.18em;
-      background: linear-gradient(90deg, var(--gold-dk), var(--gold-lt), var(--gold-sh), var(--gold-lt), var(--gold-dk));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-top: 0.2rem;
-    }
-
-    header p { margin-top: 0.7rem; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.14em; font-weight: 300; text-transform: uppercase; }
-
-    .sep { position: relative; z-index: 10; display: flex; align-items: center; gap: 0.6rem; padding: 0 1rem 1rem; }
-    .sep-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
-    .sep-gem { font-size: 0.6rem; color: var(--gold); letter-spacing: 0.3em; }
-
-    .cart-bar {
-      position: sticky; top: 0; z-index: 100;
-      margin: 0 0.9rem;
-      background: rgba(5,4,4,0.92);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border); border-radius: 12px;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.7rem 1rem;
-      box-shadow: 0 6px 30px rgba(0,0,0,0.7), inset 0 1px 0 rgba(201,168,76,0.12);
-    }
-
-    .cart-info { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
-    .cart-info strong { color: var(--gold-lt); font-weight: 700; }
-
-    .btn-cart {
-      background: transparent; border: 1px solid var(--border); color: var(--gold);
-      font-family: 'Cinzel', serif; font-size: 0.58rem; font-weight: 600;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      padding: 0.48rem 1rem; border-radius: 2rem;
-      cursor: pointer; transition: all 0.35s; opacity: 0.3; pointer-events: none;
-    }
-
-    .btn-cart.active {
-      opacity: 1; pointer-events: auto;
-      background: linear-gradient(135deg, #1a1208, #2a1e08);
-      border-color: var(--gold);
-      box-shadow: 0 0 18px var(--gold-glow), 0 4px 14px rgba(0,0,0,0.5);
-      animation: gold-pulse 3s ease-in-out infinite;
-    }
-
-    @keyframes gold-pulse {
-      0%,100% { box-shadow: 0 0 14px var(--gold-glow), 0 4px 14px rgba(0,0,0,0.5); }
-      50%      { box-shadow: 0 0 28px rgba(201,168,76,0.38), 0 4px 18px rgba(0,0,0,0.5); }
-    }
-
-    .section-label {
-      position: relative; z-index: 10;
-      padding: 1.8rem 0.9rem 0.8rem;
-      display: flex; align-items: center; gap: 0.9rem;
-    }
-
-    .section-label span {
-      font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.28em;
-      text-transform: uppercase; color: var(--gold); white-space: nowrap;
-    }
-
-    .section-label-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
-
-    .grid {
-      position: relative; z-index: 10;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0.9rem; padding: 0 0.9rem;
-    }
-
-    .card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 1.1rem 0.9rem 0.9rem;
-      display: flex; flex-direction: column; gap: 0.5rem;
-      position: relative; overflow: hidden;
-      transition: all 0.35s ease; cursor: default;
-    }
-
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-sh) 50%, var(--gold) 70%, transparent 100%);
-      opacity: 0.4;
-    }
-
-    .card::after {
-      content: ''; position: absolute; bottom: 0; right: 0;
-      width: 30px; height: 30px;
-      background: linear-gradient(135deg, transparent 50%, rgba(201,168,76,0.08) 50%);
-      border-radius: 0 0 16px 0;
-    }
-
-    .card:hover { background: var(--card-h); border-color: var(--border-h); transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.7), 0 0 24px var(--gold-glow); }
-    .card:hover::before { opacity: 1; }
-
-    .card.in-cart {
-      border-color: var(--gold);
-      background: linear-gradient(160deg, rgba(201,168,76,0.08), var(--card));
-      box-shadow: 0 0 20px var(--gold-glow);
-    }
-
-    .check-badge {
-      position: absolute; top: 0.6rem; right: 0.6rem;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold-dk), var(--gold));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.58rem; color: #0a0805; font-weight: 900;
-      opacity: 0; transform: scale(0);
-      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    }
-
-    .card.in-cart .check-badge { opacity: 1; transform: scale(1); }
-
-    .card-visual { font-size: 2.1rem; line-height: 1; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6)); }
-    .card-svg { width: 58px; height: 36px; }
-
-    .card-name {
-      font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 400;
-      letter-spacing: 0.05em; line-height: 1.25; color: var(--text);
-    }
-
-    .card-desc { font-size: 0.62rem; color: var(--muted); line-height: 1.45; font-style: italic; font-weight: 300; }
-
-    /* ── LIEN DÉTAIL ── */
-    .btn-detail {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: var(--gold-dim);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.32rem 0.55rem;
-      font-family: 'Cinzel', serif; font-size: 0.48rem;
-      font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
-      color: var(--gold); cursor: pointer;
-      transition: all 0.22s;
-      width: 100%; justify-content: center;
-      margin-top: 0.1rem;
-    }
-
-    .btn-detail:hover {
-      background: rgba(200,160,122,0.2);
-      border-color: var(--gold);
-      color: var(--gold-sh);
-      box-shadow: 0 0 10px var(--gold-glow);
-    }
-
-    .btn-detail-icon { font-size: 0.7rem; }
-
-    .card-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: auto; padding-top: 0.6rem;
-      border-top: 1px solid rgba(201,168,76,0.1);
-    }
-
-    .card-price {
-      font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold), var(--gold-sh));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-
-    .btn-add {
-      position: relative; overflow: hidden;
-      border: 1px solid var(--border); background: transparent; color: var(--gold);
-      font-family: 'Cinzel', serif; font-size: 0.55rem; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 0.38rem 0.65rem; border-radius: 2rem;
-      cursor: pointer; transition: all 0.28s; white-space: nowrap;
-    }
-
-    .btn-add::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, #1e1608, #2e2010, #1e1608);
-      opacity: 0; transition: opacity 0.28s;
-    }
-
-    .btn-add span { position: relative; z-index: 1; }
-    .btn-add.added { border-color: var(--gold); color: var(--gold-lt); }
-    .btn-add.added::before { opacity: 1; }
-    .btn-add:active { transform: scale(0.92); }
-
-    .ice-banner {
-      position: relative; z-index: 10;
-      margin: 1.6rem 0.9rem 0; padding: 0.85rem 1rem;
-      background: rgba(40,80,130,0.08); border: 1px solid rgba(80,130,200,0.15);
-      border-radius: 12px; font-size: 0.7rem; color: #5a80a8; line-height: 1.55;
-    }
-
-    .ice-banner strong { color: #7aaace; display: block; margin-bottom: 0.15rem; font-weight: 700; }
-
-    footer {
-      position: relative; z-index: 10;
-      text-align: center; padding: 1.6rem 1rem 3rem;
-      font-family: 'Cinzel', serif; font-size: 0.52rem; color: var(--muted);
-      letter-spacing: 0.2em; text-transform: uppercase;
-    }
-
-    .footer-sep { color: var(--gold-dk); margin: 0 0.5rem; }
-
-    /* ── OVERLAY PANIER ── */
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; backdrop-filter: blur(10px); }
-    .overlay.open { display: block; }
-
-    .drawer {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 201;
-      background: var(--surface); border-top: 1px solid var(--border);
-      border-radius: 22px 22px 0 0; padding: 1.5rem 1.2rem 2.5rem;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-      max-height: 85vh; overflow-y: auto;
-      box-shadow: 0 -20px 60px rgba(0,0,0,0.8), 0 -1px 0 rgba(201,168,76,0.2);
-    }
-
-    .drawer.open { transform: translateY(0); }
-
-    .drawer-handle {
-      width: 36px; height: 3px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      border-radius: 2px; margin: 0 auto 1.5rem;
-    }
-
-    .drawer-title { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 400; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.2rem; }
-    .drawer-sub { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.1rem; }
-
-    .drawer-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.8rem 0; border-bottom: 1px solid rgba(201,168,76,0.08); font-size: 0.83rem;
-    }
-
-    .drawer-item-name { color: var(--text); font-weight: 300; }
-    .drawer-item-price {
-      font-family: 'Cinzel', serif; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold), var(--gold-sh));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-
-    .drawer-total { display: flex; justify-content: space-between; align-items: baseline; padding: 1rem 0 0.5rem; }
-    .drawer-total-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
-    .drawer-total-amount {
-      font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold), var(--gold-sh));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-
-    .empty-msg { text-align: center; padding: 2rem 0; color: var(--muted); font-size: 0.83rem; font-style: italic; }
-
-    .btn-pay {
-      width: 100%; margin-top: 1.1rem; padding: 1.1rem;
-      background: linear-gradient(135deg, #1a1308 0%, #2e2210 50%, #1a1308 100%);
-      border: 1px solid var(--gold); border-radius: 12px; color: var(--gold-lt);
-      font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      cursor: pointer; transition: all 0.35s;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.5); position: relative; overflow: hidden;
-    }
-
-    .btn-pay::before {
-      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.15), transparent);
-      transition: left 0.6s;
-    }
-
-    .btn-pay:not(:disabled):hover {
-      background: linear-gradient(135deg, #221a08, #3a2c10, #221a08);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 24px var(--gold-glow);
-      transform: translateY(-1px);
-    }
-
-    .btn-pay:not(:disabled):hover::before { left: 100%; }
-    .btn-pay:active { transform: scale(0.98); }
-    .btn-pay:disabled { opacity: 0.25; cursor: default; }
-
-    /* ══════════════════════════════
-       MODAL DÉTAIL PETIT DÉJEUNER
-    ══════════════════════════════ */
-    .detail-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.88); z-index: 300;
-      backdrop-filter: blur(14px);
-      align-items: flex-end; justify-content: center;
-    }
-
-    .detail-overlay.open { display: flex; }
-
-    .detail-modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 22px 22px 0 0;
-      width: 100%; max-width: 480px;
-      padding: 1.6rem 1.4rem 2.8rem;
-      transform: translateY(30px);
-      opacity: 0;
-      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
-      box-shadow: 0 -20px 60px rgba(0,0,0,0.9), 0 -1px 0 rgba(201,168,76,0.25);
-      position: relative; overflow: hidden;
-    }
-
-    .detail-modal::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--gold-dk), var(--gold-sh), var(--gold-dk));
-    }
-
-    .detail-overlay.open .detail-modal { transform: translateY(0); opacity: 1; }
-
-    .detail-handle {
-      width: 36px; height: 3px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      border-radius: 2px; margin: 0 auto 1.4rem;
-    }
-
-    .detail-header {
-      display: flex; align-items: center; gap: 0.9rem;
-      margin-bottom: 1.2rem; padding-bottom: 0.9rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .detail-emoji { font-size: 2.2rem; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5)); }
-
-    .detail-header-text h3 {
-      font-family: 'Cinzel', serif; font-size: 1.15rem; font-weight: 400;
-      letter-spacing: 0.08em; color: var(--text);
-    }
-
-    .detail-header-text p {
-      font-size: 0.58rem; color: var(--muted); letter-spacing: 0.16em;
-      text-transform: uppercase; margin-top: 0.15rem;
-    }
-
-    .detail-list {
-      list-style: none; display: flex; flex-direction: column;
-      gap: 0.5rem; margin-bottom: 1.4rem;
-    }
-
-    .detail-list li {
-      display: flex; align-items: center; gap: 0.75rem;
-      padding: 0.65rem 0.9rem;
-      background: var(--gold-dim);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.8rem; color: var(--text); font-weight: 300;
-    }
-
-    .detail-list li .d-icon { font-size: 1.15rem; flex-shrink: 0; }
-
-    .detail-list li .d-label { flex: 1; }
-
-    .detail-list li .d-qty {
-      font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: 700;
-      color: var(--gold); white-space: nowrap;
-      background: rgba(200,160,122,0.12);
-      border: 1px solid rgba(200,160,122,0.25);
-      border-radius: 20px;
-      padding: 0.1rem 0.55rem;
-    }
-
-    .detail-close {
-      width: 100%; padding: 0.9rem;
-      background: transparent;
-      border: 1px solid var(--border); border-radius: 12px;
-      color: var(--muted); font-family: 'Cinzel', serif;
-      font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-      cursor: pointer; transition: all 0.28s;
-    }
-
-    .detail-close:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* ── SUCCÈS ── */
-    .success-screen {
-      display: none; position: fixed; inset: 0; z-index: 400;
-      background: radial-gradient(ellipse at center, #120e04 0%, var(--bg) 70%);
-      flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 2rem;
-    }
-
-    .success-screen.show { display: flex; }
-
-    .success-icon { font-size: 3.5rem; margin-bottom: 1rem; animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both; filter: drop-shadow(0 0 20px var(--gold-glow)); }
-
-    @keyframes popIn {
-      from { transform: scale(0) rotate(-15deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0); opacity: 1; }
-    }
-
-    .success-screen h2 { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 400; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.4rem; }
-    .success-screen > p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.8rem; }
-    #success-codes { width: 100%; max-width: 340px; }
-
-    .code-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 1.2rem 1.3rem; margin: 0.6rem 0;
-      animation: popIn 0.4s ease both; position: relative; overflow: hidden;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.6), 0 0 16px var(--gold-glow);
-    }
-
-    .code-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--gold-dk), var(--gold-sh), var(--gold-dk));
-    }
-
-    .code-product { font-size: 0.76rem; color: var(--muted); margin-bottom: 0.3rem; font-style: italic; }
-    .code-label { font-family: 'Cinzel', serif; font-size: 0.56rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
-
-    .code-value {
-      font-family: 'Courier New', monospace; font-size: 2.8rem; font-weight: 700; letter-spacing: 0.3em;
-      background: linear-gradient(135deg, var(--gold), var(--gold-sh), var(--gold));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-
-    .success-note {
-      margin-top: 1rem; font-size: 0.68rem; color: var(--gold);
-      background: var(--gold-dim); border: 1px solid var(--border);
-      border-radius: 10px; padding: 0.65rem 1rem;
-      max-width: 340px; width: 100%; font-style: italic;
-    }
+    :root{--bg:#0d0806;--surface:#130d08;--card:#1c1108;--card-h:#241608;--gold:#c8a07a;--gold-lt:#e2c09a;--gold-sh:#f0d4b0;--gold-dk:#8a6448;--gold-dim:rgba(200,160,122,0.12);--gold-glow:rgba(200,160,122,0.22);--border:rgba(200,160,122,0.18);--border-h:rgba(200,160,122,0.45);--text:#ede4d8;--muted:#6a5a50}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 45% at 85% 5%,rgba(156,92,106,.14) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 10% 90%,rgba(200,160,122,.09) 0%,transparent 55%),repeating-linear-gradient(45deg,transparent 0px,transparent 40px,rgba(200,160,122,.012) 40px,rgba(200,160,122,.012) 41px)}
+    .top-banner{position:relative;z-index:10;background:linear-gradient(90deg,#3a1f1a,#6a3528,#3a1f1a);text-align:center;padding:.5rem 1rem;font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.38em;text-transform:uppercase;color:rgba(237,228,216,.8);font-weight:600}
+    header{position:relative;z-index:10;text-align:center;padding:2.4rem 1.5rem 1.2rem}
+    .crown{font-size:1.6rem;color:var(--gold);margin-bottom:.8rem;display:block;filter:drop-shadow(0 0 12px var(--gold-glow))}
+    .crest{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:.8rem}
+    .crest-line{flex:1;max-width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+    .crest-line.r{background:linear-gradient(90deg,var(--gold),transparent)}
+    .crest-dot{width:5px;height:5px;background:var(--gold);transform:rotate(45deg)}
+    header h1{font-family:'Cinzel',serif;font-size:2rem;font-weight:400;letter-spacing:.1em;line-height:1.2;color:var(--text);text-shadow:0 0 40px rgba(201,168,76,.2)}
+    header h1 .gold-line{display:block;font-size:1.15rem;font-weight:700;letter-spacing:.18em;background:linear-gradient(90deg,var(--gold-dk),var(--gold-lt),var(--gold-sh),var(--gold-lt),var(--gold-dk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:.2rem}
+    header p{margin-top:.7rem;font-size:.65rem;color:var(--muted);letter-spacing:.14em;font-weight:300;text-transform:uppercase}
+    .sep{position:relative;z-index:10;display:flex;align-items:center;gap:.6rem;padding:0 1rem 1rem}
+    .sep-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+    .sep-gem{font-size:.6rem;color:var(--gold);letter-spacing:.3em}
+    .cart-bar{position:sticky;top:0;z-index:100;margin:0 .9rem;background:rgba(5,4,4,.92);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;box-shadow:0 6px 30px rgba(0,0,0,.7),inset 0 1px 0 rgba(201,168,76,.12)}
+    .cart-info{font-size:.7rem;color:var(--muted);letter-spacing:.06em}
+    .cart-info strong{color:var(--gold-lt);font-weight:700}
+    .btn-cart{background:transparent;border:1px solid var(--border);color:var(--gold);font-family:'Cinzel',serif;font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:.48rem 1rem;border-radius:2rem;cursor:pointer;transition:all .35s;opacity:.3;pointer-events:none}
+    .btn-cart.active{opacity:1;pointer-events:auto;background:linear-gradient(135deg,#1a1208,#2a1e08);border-color:var(--gold);box-shadow:0 0 18px var(--gold-glow),0 4px 14px rgba(0,0,0,.5);animation:gold-pulse 3s ease-in-out infinite}
+    @keyframes gold-pulse{0%,100%{box-shadow:0 0 14px var(--gold-glow),0 4px 14px rgba(0,0,0,.5)}50%{box-shadow:0 0 28px rgba(201,168,76,.38),0 4px 18px rgba(0,0,0,.5)}}
+    .section-label{position:relative;z-index:10;padding:1.8rem .9rem .8rem;display:flex;align-items:center;gap:.9rem}
+    .section-label span{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+    .section-label-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+    .grid{position:relative;z-index:10;display:grid;grid-template-columns:1fr 1fr;gap:.9rem;padding:0 .9rem}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.1rem .9rem .9rem;display:flex;flex-direction:column;gap:.5rem;position:relative;overflow:hidden;transition:all .35s ease;cursor:default}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold-sh) 50%,var(--gold) 70%,transparent 100%);opacity:.4}
+    .card::after{content:'';position:absolute;bottom:0;right:0;width:30px;height:30px;background:linear-gradient(135deg,transparent 50%,rgba(201,168,76,.08) 50%);border-radius:0 0 16px 0}
+    .card:hover{background:var(--card-h);border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.7),0 0 24px var(--gold-glow)}
+    .card:hover::before{opacity:1}
+    .card.in-cart{border-color:var(--gold);background:linear-gradient(160deg,rgba(201,168,76,.08),var(--card));box-shadow:0 0 20px var(--gold-glow)}
+    .check-badge{position:absolute;top:.6rem;right:.6rem;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dk),var(--gold));display:flex;align-items:center;justify-content:center;font-size:.58rem;color:#0a0805;font-weight:900;opacity:0;transform:scale(0);transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+    .card.in-cart .check-badge{opacity:1;transform:scale(1)}
+    .card-visual{font-size:2.1rem;line-height:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+    .card-svg{width:58px;height:36px}
+    .card-name{font-family:'Cinzel',serif;font-size:.8rem;font-weight:400;letter-spacing:.05em;line-height:1.25;color:var(--text)}
+    .card-desc{font-size:.62rem;color:var(--muted);line-height:1.45;font-style:italic;font-weight:300}
+    .btn-detail{display:inline-flex;align-items:center;gap:.3rem;background:var(--gold-dim);border:1px solid var(--border);border-radius:6px;padding:.32rem .55rem;font-family:'Cinzel',serif;font-size:.48rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all .22s;width:100%;justify-content:center;margin-top:.1rem}
+    .btn-detail:hover{background:rgba(200,160,122,.2);border-color:var(--gold);color:var(--gold-sh);box-shadow:0 0 10px var(--gold-glow)}
+    .btn-detail-icon{font-size:.7rem}
+    .card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.6rem;border-top:1px solid rgba(201,168,76,.1)}
+    .card-price{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold-sh));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .btn-add{position:relative;overflow:hidden;border:1px solid var(--border);background:transparent;color:var(--gold);font-family:'Cinzel',serif;font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.38rem .65rem;border-radius:2rem;cursor:pointer;transition:all .28s;white-space:nowrap}
+    .btn-add::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#1e1608,#2e2010,#1e1608);opacity:0;transition:opacity .28s}
+    .btn-add span{position:relative;z-index:1}
+    .btn-add.added{border-color:var(--gold);color:var(--gold-lt)}
+    .btn-add.added::before{opacity:1}
+    .btn-add:active{transform:scale(.92)}
+    .ice-banner{position:relative;z-index:10;margin:1.6rem .9rem 0;padding:.85rem 1rem;background:rgba(40,80,130,.08);border:1px solid rgba(80,130,200,.15);border-radius:12px;font-size:.7rem;color:#5a80a8;line-height:1.55}
+    .ice-banner strong{color:#7aaace;display:block;margin-bottom:.15rem;font-weight:700}
+    footer{position:relative;z-index:10;text-align:center;padding:1.6rem 1rem 3rem;font-family:'Cinzel',serif;font-size:.52rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+    .footer-sep{color:var(--gold-dk);margin:0 .5rem}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;backdrop-filter:blur(10px)}
+    .overlay.open{display:block}
+    .drawer{position:fixed;bottom:0;left:0;right:0;z-index:201;background:var(--surface);border-top:1px solid var(--border);border-radius:22px 22px 0 0;padding:1.5rem 1.2rem 2.5rem;transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.8),0 -1px 0 rgba(201,168,76,.2)}
+    .drawer.open{transform:translateY(0)}
+    .drawer-handle{width:36px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:2px;margin:0 auto 1.5rem}
+    .drawer-title{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:400;letter-spacing:.1em;color:var(--text);margin-bottom:.2rem}
+    .drawer-sub{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.1rem}
+    .drawer-item{display:flex;align-items:center;justify-content:space-between;padding:.8rem 0;border-bottom:1px solid rgba(201,168,76,.08);font-size:.83rem}
+    .drawer-item-name{color:var(--text);font-weight:300}
+    .drawer-item-price{font-family:'Cinzel',serif;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold-sh));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .drawer-total{display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0 .5rem}
+    .drawer-total-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+    .drawer-total-amount{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold-sh));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .empty-msg{text-align:center;padding:2rem 0;color:var(--muted);font-size:.83rem;font-style:italic}
+    .btn-pay{width:100%;margin-top:1.1rem;padding:1.1rem;background:linear-gradient(135deg,#1a1308 0%,#2e2210 50%,#1a1308 100%);border:1px solid var(--gold);border-radius:12px;color:var(--gold-lt);font-family:'Cinzel',serif;font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .35s;box-shadow:0 6px 24px rgba(0,0,0,.5);position:relative;overflow:hidden}
+    .btn-pay::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,76,.15),transparent);transition:left .6s}
+    .btn-pay:not(:disabled):hover{background:linear-gradient(135deg,#221a08,#3a2c10,#221a08);box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 24px var(--gold-glow);transform:translateY(-1px)}
+    .btn-pay:not(:disabled):hover::before{left:100%}
+    .btn-pay:active{transform:scale(.98)}
+    .btn-pay:disabled{opacity:.25;cursor:default}
+    .detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;backdrop-filter:blur(14px);align-items:flex-end;justify-content:center}
+    .detail-overlay.open{display:flex}
+    .detail-modal{background:var(--surface);border:1px solid var(--border);border-radius:22px 22px 0 0;width:100%;max-width:480px;padding:1.6rem 1.4rem 2.8rem;transform:translateY(30px);opacity:0;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s ease;box-shadow:0 -20px 60px rgba(0,0,0,.9),0 -1px 0 rgba(201,168,76,.25);position:relative;overflow:hidden}
+    .detail-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dk),var(--gold-sh),var(--gold-dk))}
+    .detail-overlay.open .detail-modal{transform:translateY(0);opacity:1}
+    .detail-handle{width:36px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:2px;margin:0 auto 1.4rem}
+    .detail-header{display:flex;align-items:center;gap:.9rem;margin-bottom:1.2rem;padding-bottom:.9rem;border-bottom:1px solid var(--border)}
+    .detail-emoji{font-size:2.2rem;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))}
+    .detail-header-text h3{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:400;letter-spacing:.08em;color:var(--text)}
+    .detail-header-text p{font-size:.58rem;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-top:.15rem}
+    .detail-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.4rem}
+    .detail-list li{display:flex;align-items:center;gap:.75rem;padding:.65rem .9rem;background:var(--gold-dim);border:1px solid var(--border);border-radius:10px;font-size:.8rem;color:var(--text);font-weight:300}
+    .detail-list li .d-icon{font-size:1.15rem;flex-shrink:0}
+    .detail-list li .d-label{flex:1}
+    .detail-list li .d-qty{font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:var(--gold);white-space:nowrap;background:rgba(200,160,122,.12);border:1px solid rgba(200,160,122,.25);border-radius:20px;padding:.1rem .55rem}
+    .detail-close{width:100%;padding:.9rem;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--muted);font-family:'Cinzel',serif;font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .28s}
+    .detail-close:hover{border-color:var(--gold);color:var(--gold)}
+    .success-screen{display:none;position:fixed;inset:0;z-index:400;background:radial-gradient(ellipse at center,#120e04 0%,var(--bg) 70%);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
+    .success-screen.show{display:flex}
+    .success-icon{font-size:3.5rem;margin-bottom:1rem;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;filter:drop-shadow(0 0 20px var(--gold-glow))}
+    @keyframes popIn{from{transform:scale(0) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+    .success-screen h2{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:400;letter-spacing:.1em;color:var(--text);margin-bottom:.4rem}
+    .success-screen>p{font-size:.75rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.8rem}
+    #success-codes{width:100%;max-width:340px}
+    .code-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.3rem;margin:.6rem 0;animation:popIn .4s ease both;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.6),0 0 16px var(--gold-glow)}
+    .code-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dk),var(--gold-sh),var(--gold-dk))}
+    .code-product{font-size:.76rem;color:var(--muted);margin-bottom:.3rem;font-style:italic}
+    .code-label{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+    .code-value{font-family:'Courier New',monospace;font-size:2.8rem;font-weight:700;letter-spacing:.3em;background:linear-gradient(135deg,var(--gold),var(--gold-sh),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .success-note{margin-top:1rem;font-size:.68rem;color:var(--gold);background:var(--gold-dim);border:1px solid var(--border);border-radius:10px;padding:.65rem 1rem;max-width:340px;width:100%;font-style:italic}
   </style>
 </head>
 <body>
-
 <div class="top-banner">❖ &nbsp; L'Appart Salonais &nbsp;·&nbsp; Salon-de-Provence &nbsp;·&nbsp; Mini-Bar Privé &nbsp; ❖</div>
-
 <header>
   <span class="crown">♛</span>
-  <div class="crest">
-    <div class="crest-line"></div>
-    <div class="crest-dot"></div>
-    <div class="crest-line r"></div>
-  </div>
-  <h1>
-    La Boutique
-    <span class="gold-line">de votre séjour</span>
-  </h1>
+  <div class="crest"><div class="crest-line"></div><div class="crest-dot"></div><div class="crest-line r"></div></div>
+  <h1>La Boutique<span class="gold-line">de votre séjour</span></h1>
   <p>Sélectionnez · Payez · Accédez instantanément</p>
 </header>
-
-<div class="sep">
-  <div class="sep-line"></div>
-  <span class="sep-gem">❖ ◆ ❖</span>
-  <div class="sep-line"></div>
-</div>
-
+<div class="sep"><div class="sep-line"></div><span class="sep-gem">❖ ◆ ❖</span><div class="sep-line"></div></div>
 <div class="cart-bar">
   <div class="cart-info">Panier &nbsp;·&nbsp; <strong id="cart-count">0 article</strong></div>
-  <button class="btn-cart" id="open-cart" onclick="openDrawer()">
-    Commander &nbsp;·&nbsp; <span id="cart-total-bar">0,00 €</span>
-  </button>
+  <button class="btn-cart" id="open-cart" onclick="openDrawer()">Commander &nbsp;·&nbsp; <span id="cart-total-bar">0,00 €</span></button>
 </div>
-
-<div class="section-label">
-  <span>— Boissons —</span>
-  <div class="section-label-line"></div>
-</div>
+<div class="section-label"><span>— Boissons —</span><div class="section-label-line"></div></div>
 <div class="grid" id="grid-boissons"></div>
-
-<div class="section-label">
-  <span>— Snacks —</span>
-  <div class="section-label-line"></div>
-</div>
+<div class="section-label"><span>— Snacks —</span><div class="section-label-line"></div></div>
 <div class="grid" id="grid-snacks"></div>
-
-<div class="ice-banner">
-  🧊 <strong>Boissons à température ambiante</strong>
-  Des glaçons sont à votre disposition dans le congélateur pour profiter de vos boissons bien fraîches !
-</div>
-
-<footer>
-  <span class="footer-sep">❖</span>
-  L'Appart Salonais &nbsp;·&nbsp; Tous droits réservés
-  <span class="footer-sep">❖</span>
-</footer>
-
-<!-- OVERLAY + DRAWER PANIER -->
+<div class="ice-banner">🧊 <strong>Boissons à température ambiante</strong>Des glaçons sont à votre disposition dans le congélateur pour profiter de vos boissons bien fraîches !</div>
+<footer><span class="footer-sep">❖</span>L'Appart Salonais &nbsp;·&nbsp; Tous droits réservés<span class="footer-sep">❖</span></footer>
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-handle"></div>
@@ -541,79 +138,31 @@
   <div class="drawer-sub">Récapitulatif de commande</div>
   <div id="drawer-items"></div>
   <div id="drawer-total" style="display:none">
-    <div class="drawer-total">
-      <span class="drawer-total-label">Total</span>
-      <span class="drawer-total-amount" id="drawer-total-amount">0,00 €</span>
-    </div>
+    <div class="drawer-total"><span class="drawer-total-label">Total</span><span class="drawer-total-amount" id="drawer-total-amount">0,00 €</span></div>
   </div>
-  <button class="btn-pay" id="btn-pay" onclick="checkout()" disabled>
-    ❖ &nbsp; Procéder au paiement
-  </button>
+  <button class="btn-pay" id="btn-pay" onclick="checkout()" disabled>❖ &nbsp; Procéder au paiement</button>
 </div>
-
-<!-- MODAL DÉTAIL PETIT DÉJEUNER -->
 <div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
   <div class="detail-modal" id="detail-modal">
     <div class="detail-handle"></div>
     <div class="detail-header">
       <div class="detail-emoji">🥐</div>
-      <div class="detail-header-text">
-        <h3>Petit Déjeuner</h3>
-        <p>Contenu du tiroir · Tiroir 7</p>
-      </div>
+      <div class="detail-header-text"><h3>Petit Déjeuner</h3><p>Contenu du tiroir · Tiroir 7</p></div>
     </div>
     <ul class="detail-list">
-      <li>
-        <span class="d-icon">🍊</span>
-        <span class="d-label">Jus d'Orange pur jus</span>
-        <span class="d-qty">× 2</span>
-      </li>
-      <li>
-        <span class="d-icon">🥣</span>
-        <span class="d-label">Céréales Muesli</span>
-        <span class="d-qty">× 1</span>
-      </li>
-      <li>
-        <span class="d-icon">🍫</span>
-        <span class="d-label">Céréales Chocapic</span>
-        <span class="d-qty">× 1</span>
-      </li>
-      <li>
-        <span class="d-icon">🧁</span>
-        <span class="d-label">Madeleines</span>
-        <span class="d-qty">× 4</span>
-      </li>
-      <li>
-        <span class="d-icon">🫙</span>
-        <span class="d-label">Nutella (portion individuelle)</span>
-        <span class="d-qty">× 6</span>
-      </li>
-      <li>
-        <span class="d-icon">🍓</span>
-        <span class="d-label">Confiture Fraise</span>
-        <span class="d-qty">× 4</span>
-      </li>
-      <li>
-        <span class="d-icon">🫐</span>
-        <span class="d-label">Confiture Myrtille</span>
-        <span class="d-qty">× 4</span>
-      </li>
-      <li>
-        <span class="d-icon">🍑</span>
-        <span class="d-label">Confiture Abricot</span>
-        <span class="d-qty">× 4</span>
-      </li>
-      <li>
-        <span class="d-icon">🍞</span>
-        <span class="d-label">Biscottes</span>
-        <span class="d-qty">✓</span>
-      </li>
+      <li><span class="d-icon">🍊</span><span class="d-label">Jus d'Orange pur jus</span><span class="d-qty">× 2</span></li>
+      <li><span class="d-icon">🥣</span><span class="d-label">Céréales Muesli</span><span class="d-qty">× 1</span></li>
+      <li><span class="d-icon">🍫</span><span class="d-label">Céréales Chocapic</span><span class="d-qty">× 1</span></li>
+      <li><span class="d-icon">🧁</span><span class="d-label">Madeleines</span><span class="d-qty">× 4</span></li>
+      <li><span class="d-icon">🫙</span><span class="d-label">Nutella (portion individuelle)</span><span class="d-qty">× 6</span></li>
+      <li><span class="d-icon">🍓</span><span class="d-label">Confiture Fraise</span><span class="d-qty">× 4</span></li>
+      <li><span class="d-icon">🫐</span><span class="d-label">Confiture Myrtille</span><span class="d-qty">× 4</span></li>
+      <li><span class="d-icon">🍑</span><span class="d-label">Confiture Abricot</span><span class="d-qty">× 4</span></li>
+      <li><span class="d-icon">🍞</span><span class="d-label">Biscottes</span><span class="d-qty">✓</span></li>
     </ul>
     <button class="detail-close" onclick="closeDetail()">✕ &nbsp; Fermer</button>
   </div>
 </div>
-
-<!-- SUCCÈS -->
 <div class="success-screen" id="success-screen">
   <div class="success-icon">🔑</div>
   <h2>Paiement Confirmé</h2>
@@ -621,159 +170,65 @@
   <div id="success-codes"></div>
   <p class="success-note">📸 Prenez une photo de vos codes avant de fermer cette page.</p>
 </div>
-
 <script>
-  const PRODUCTS = [
-    { id:1, emoji:'🥤', name:'Coca-Cola',       desc:'Pack de 2 canettes 33cl',                price:3.99, tiroir:1, code:'58966#', cat:'boissons' },
-    { id:5, emoji:'💧', name:'Eau Pétillante',  desc:'Pack de 2 bouteilles 50cl',              price:3.00, tiroir:2, code:'56789#', cat:'boissons' },
-    { id:7, svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="64" height="40"><circle cx="50" cy="30" r="22" fill="#FFD700"/><g fill="#003087"><ellipse cx="30" cy="32" rx="14" ry="9" transform="rotate(-15 30 32)"/><ellipse cx="22" cy="27" rx="5" ry="4" transform="rotate(-20 22 27)"/><path d="M18 22 Q14 18 16 15 Q20 18 20 22Z"/><path d="M36 26 Q42 24 43 27 Q39 30 36 28Z"/><circle cx="24" cy="26" r="1.5" fill="#FFD700"/></g><g fill="#CC0000"><ellipse cx="70" cy="32" rx="14" ry="9" transform="rotate(15 70 32)"/><ellipse cx="78" cy="27" rx="5" ry="4" transform="rotate(20 78 27)"/><path d="M82 22 Q86 18 84 15 Q80 18 80 22Z"/><path d="M64 26 Q58 24 57 27 Q61 30 64 28Z"/><circle cx="76" cy="26" r="1.5" fill="#FFD700"/></g><text x="50" y="56" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="9" fill="#003087" letter-spacing="1">RED BULL</text></svg>`,
-            name:'Red Bull',        desc:'Pack de 2 canettes 25cl, énergisante',    price:4.99, tiroir:3, code:'67890#', cat:'boissons' },
-    { id:9, emoji:'🍊', name:"Jus d'Orange",   desc:'Pack de 2 bouteilles 33cl, pur jus',    price:4.00, tiroir:4, code:'98235#', cat:'boissons' },
-    { id:2, svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 70" width="36" height="42"><defs><linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c020"/><stop offset="100%" stop-color="#c89010"/></linearGradient></defs><path d="M18 8 Q30 2 42 8 L48 28 Q50 35 48 42 L42 62 Q30 68 18 62 L12 42 Q10 35 12 28 Z" fill="url(#cg)"/><rect x="10" y="26" width="40" height="18" rx="2" fill="rgba(180,60,20,0.92)"/><text x="30" y="38" text-anchor="middle" font-family="Arial Black" font-size="7" font-weight="900" fill="#fff" letter-spacing="0.5">CHIPS</text><ellipse cx="30" cy="11" rx="9" ry="3.5" fill="rgba(255,230,80,0.35)"/></svg>`,
-            name:'Chips',           desc:'Vico Chips Classique Nature',              price:2.50, tiroir:5, code:'23456#', cat:'snacks' },
-    { id:4, emoji:'🍬', name:"M&M's Peanut",   desc:"M&M's Peanut 250g",                     price:5.00, tiroir:6, code:'34567#', cat:'snacks' },
-    { id:3, emoji:'🥐', name:'Petit Déjeuner', desc:null, hasDetail:true,                     price:5.00, tiroir:7, code:'45678#', cat:'snacks' },
+  const PRODUCTS=[
+    {id:1,emoji:'🥤',name:'Coca-Cola',desc:'Pack de 2 canettes 33cl',price:3.99,tiroir:1,code:'58966#',cat:'boissons'},
+    {id:5,emoji:'💧',name:'Eau Pétillante',desc:'Pack de 2 bouteilles 50cl',price:3.00,tiroir:2,code:'56789#',cat:'boissons'},
+    {id:7,svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="64" height="40"><circle cx="50" cy="30" r="22" fill="#FFD700"/><g fill="#003087"><ellipse cx="30" cy="32" rx="14" ry="9" transform="rotate(-15 30 32)"/><ellipse cx="22" cy="27" rx="5" ry="4" transform="rotate(-20 22 27)"/><path d="M18 22 Q14 18 16 15 Q20 18 20 22Z"/><path d="M36 26 Q42 24 43 27 Q39 30 36 28Z"/><circle cx="24" cy="26" r="1.5" fill="#FFD700"/></g><g fill="#CC0000"><ellipse cx="70" cy="32" rx="14" ry="9" transform="rotate(15 70 32)"/><ellipse cx="78" cy="27" rx="5" ry="4" transform="rotate(20 78 27)"/><path d="M82 22 Q86 18 84 15 Q80 18 80 22Z"/><path d="M64 26 Q58 24 57 27 Q61 30 64 28Z"/><circle cx="76" cy="26" r="1.5" fill="#FFD700"/></g><text x="50" y="56" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="9" fill="#003087" letter-spacing="1">RED BULL</text></svg>',name:'Red Bull',desc:'Pack de 2 canettes 25cl, énergisante',price:4.99,tiroir:3,code:'67890#',cat:'boissons'},
+    {id:9,emoji:'🍊',name:"Jus d'Orange",desc:'Pack de 2 bouteilles 33cl, pur jus',price:4.00,tiroir:4,code:'98235#',cat:'boissons'},
+    {id:2,svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 70" width="36" height="42"><defs><linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c020"/><stop offset="100%" stop-color="#c89010"/></linearGradient></defs><path d="M18 8 Q30 2 42 8 L48 28 Q50 35 48 42 L42 62 Q30 68 18 62 L12 42 Q10 35 12 28 Z" fill="url(#cg)"/><rect x="10" y="26" width="40" height="18" rx="2" fill="rgba(180,60,20,0.92)"/><text x="30" y="38" text-anchor="middle" font-family="Arial Black" font-size="7" font-weight="900" fill="#fff" letter-spacing="0.5">CHIPS</text><ellipse cx="30" cy="11" rx="9" ry="3.5" fill="rgba(255,230,80,0.35)"/></svg>',name:'Chips',desc:'Vico Chips Classique Nature',price:2.50,tiroir:5,code:'23456#',cat:'snacks'},
+    {id:4,emoji:'🍬',name:"M&M's Peanut",desc:"M&M's Peanut 250g",price:5.00,tiroir:6,code:'34567#',cat:'snacks'},
+    {id:3,emoji:'🥐',name:'Petit Déjeuner',desc:null,hasDetail:true,price:5.00,tiroir:7,code:'45678#',cat:'snacks'},
   ];
-
-  let cart = {};
-  const fmt = v => v.toFixed(2).replace('.',',') + ' €';
-
-  function cardHTML(p) {
-    const vis = p.svg
-      ? `<div class="card-visual"><div class="card-svg">${p.svg}</div></div>`
-      : `<div class="card-visual">${p.emoji}</div>`;
-
-    const descBlock = p.hasDetail
-      ? `<button class="btn-detail" onclick="openDetail(event)">
-           <span class="btn-detail-icon">☰</span>
-           Cliquez ici pour voir le détail
-         </button>`
-      : `<div class="card-desc">${p.desc}</div>`;
-
-    return `
-      <div class="card" id="card-${p.id}">
-        <div class="check-badge">✓</div>
-        ${vis}
-        <div class="card-name">${p.name}</div>
-        ${descBlock}
-        <div class="card-footer">
-          <div class="card-price">${fmt(p.price)}</div>
-          <button class="btn-add" id="btn-add-${p.id}" onclick="toggleItem(${p.id})">
-            <span>+ Ajouter</span>
-          </button>
-        </div>
-      </div>`;
+  let cart={};
+  const fmt=v=>v.toFixed(2).replace('.',',')+' €';
+  function cardHTML(p){
+    const vis=p.svg?'<div class="card-visual"><div class="card-svg">'+p.svg+'</div></div>':'<div class="card-visual">'+p.emoji+'</div>';
+    const descBlock=p.hasDetail?'<button class="btn-detail" onclick="openDetail(event)"><span class="btn-detail-icon">☰</span> Cliquez ici pour voir le détail</button>':'<div class="card-desc">'+p.desc+'</div>';
+    return '<div class="card" id="card-'+p.id+'"><div class="check-badge">✓</div>'+vis+'<div class="card-name">'+p.name+'</div>'+descBlock+'<div class="card-footer"><div class="card-price">'+fmt(p.price)+'</div><button class="btn-add" id="btn-add-'+p.id+'" onclick="toggleItem('+p.id+')"><span>+ Ajouter</span></button></div></div>';
   }
-
-  function renderAll() {
-    document.getElementById('grid-boissons').innerHTML =
-      PRODUCTS.filter(p => p.cat==='boissons').map(cardHTML).join('');
-    document.getElementById('grid-snacks').innerHTML =
-      PRODUCTS.filter(p => p.cat==='snacks').map(cardHTML).join('');
+  function renderAll(){
+    document.getElementById('grid-boissons').innerHTML=PRODUCTS.filter(p=>p.cat==='boissons').map(cardHTML).join('');
+    document.getElementById('grid-snacks').innerHTML=PRODUCTS.filter(p=>p.cat==='snacks').map(cardHTML).join('');
   }
-
-  function toggleItem(id) {
-    const btn  = document.getElementById(`btn-add-${id}`);
-    const card = document.getElementById(`card-${id}`);
-    if (cart[id]) {
-      delete cart[id];
-      btn.querySelector('span').textContent = '+ Ajouter';
-      btn.classList.remove('added');
-      card.classList.remove('in-cart');
-    } else {
-      cart[id] = 1;
-      btn.querySelector('span').textContent = '✓ Ajouté';
-      btn.classList.add('added');
-      card.classList.add('in-cart');
-    }
+  function toggleItem(id){
+    const btn=document.getElementById('btn-add-'+id);const card=document.getElementById('card-'+id);
+    if(cart[id]){delete cart[id];btn.querySelector('span').textContent='+ Ajouter';btn.classList.remove('added');card.classList.remove('in-cart');}
+    else{cart[id]=1;btn.querySelector('span').textContent='✓ Ajouté';btn.classList.add('added');card.classList.add('in-cart');}
     updateCartBar();
   }
-
-  function updateCartBar() {
-    const count = Object.keys(cart).length;
-    const total = Object.keys(cart).reduce((a,id) => a + PRODUCTS.find(x=>x.id===+id).price, 0);
-    document.getElementById('cart-count').textContent =
-      count===0 ? '0 article' : count===1 ? '1 article' : `${count} articles`;
-    document.getElementById('cart-total-bar').textContent = fmt(total);
-    document.getElementById('open-cart').classList.toggle('active', count > 0);
+  function updateCartBar(){
+    const count=Object.keys(cart).length;const total=Object.keys(cart).reduce((a,id)=>a+PRODUCTS.find(x=>x.id===+id).price,0);
+    document.getElementById('cart-count').textContent=count===0?'0 article':count===1?'1 article':count+' articles';
+    document.getElementById('cart-total-bar').textContent=fmt(total);
+    document.getElementById('open-cart').classList.toggle('active',count>0);
   }
-
-  function openDrawer() {
-    const keys    = Object.keys(cart);
-    const itemsEl = document.getElementById('drawer-items');
-    const totalEl = document.getElementById('drawer-total');
-    const payBtn  = document.getElementById('btn-pay');
-    if (!keys.length) {
-      itemsEl.innerHTML = '<p class="empty-msg">Votre panier est vide…</p>';
-      totalEl.style.display = 'none'; payBtn.disabled = true;
-    } else {
-      let total = 0;
-      itemsEl.innerHTML = keys.map(id => {
-        const p = PRODUCTS.find(x=>x.id===+id); total += p.price;
-        return `<div class="drawer-item">
-          <div class="drawer-item-name">${p.emoji||'🛒'} ${p.name}</div>
-          <div class="drawer-item-price">${fmt(p.price)}</div>
-        </div>`;
-      }).join('');
-      document.getElementById('drawer-total-amount').textContent = fmt(total);
-      totalEl.style.display = 'block'; payBtn.disabled = false;
-    }
-    document.getElementById('overlay').classList.add('open');
-    document.getElementById('drawer').classList.add('open');
+  function openDrawer(){
+    const keys=Object.keys(cart);const itemsEl=document.getElementById('drawer-items');const totalEl=document.getElementById('drawer-total');const payBtn=document.getElementById('btn-pay');
+    if(!keys.length){itemsEl.innerHTML='<p class="empty-msg">Votre panier est vide…</p>';totalEl.style.display='none';payBtn.disabled=true;}
+    else{let total=0;itemsEl.innerHTML=keys.map(id=>{const p=PRODUCTS.find(x=>x.id===+id);total+=p.price;return '<div class="drawer-item"><div class="drawer-item-name">'+(p.emoji||'🛒')+' '+p.name+'</div><div class="drawer-item-price">'+fmt(p.price)+'</div></div>';}).join('');document.getElementById('drawer-total-amount').textContent=fmt(total);totalEl.style.display='block';payBtn.disabled=false;}
+    document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');
   }
-
-  function closeDrawer() {
-    document.getElementById('overlay').classList.remove('open');
-    document.getElementById('drawer').classList.remove('open');
+  function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');}
+  function openDetail(e){if(e)e.stopPropagation();document.getElementById('detail-overlay').classList.add('open');}
+  function closeDetail(e){if(e&&document.getElementById('detail-modal').contains(e.target))return;document.getElementById('detail-overlay').classList.remove('open');}
+  async function checkout(){
+    const keys=Object.keys(cart);const btnPay=document.getElementById('btn-pay');
+    btnPay.disabled=true;btnPay.textContent='Chargement…';
+    sessionStorage.setItem('lappart_cart',JSON.stringify(keys.map(id=>+id)));
+    const items=keys.map(id=>{const p=PRODUCTS.find(x=>x.id===+id);return{name:p.name,price:p.price,quantity:1};});
+    try{const res=await fetch('/.netlify/functions/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})});const data=await res.json();if(data.url){window.location.href=data.url;}else{alert('Erreur de paiement. Veuillez réessayer.');btnPay.disabled=false;btnPay.textContent='❖  Procéder au paiement';}}
+    catch{alert('Erreur de connexion.');btnPay.disabled=false;btnPay.textContent='❖  Procéder au paiement';}
   }
-
-  function openDetail(e) {
-    if (e) e.stopPropagation();
-    document.getElementById('detail-overlay').classList.add('open');
-  }
-
-  function closeDetail(e) {
-    if (e && document.getElementById('detail-modal').contains(e.target)) return;
-    document.getElementById('detail-overlay').classList.remove('open');
-  }
-
-  async function checkout() {
-    const keys   = Object.keys(cart);
-    const btnPay = document.getElementById('btn-pay');
-    btnPay.disabled = true; btnPay.textContent = 'Chargement…';
-    sessionStorage.setItem('lappart_cart', JSON.stringify(keys.map(id=>+id)));
-    const items = keys.map(id => {
-      const p = PRODUCTS.find(x=>x.id===+id);
-      return { name: p.name, price: p.price, quantity: 1 };
-    });
-    try {
-      const res  = await fetch('/.netlify/functions/create-checkout', {
-        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({items})
-      });
-      const data = await res.json();
-      if (data.url) { window.location.href = data.url; }
-      else { alert('Erreur de paiement. Veuillez réessayer.'); btnPay.disabled=false; btnPay.textContent='❖  Procéder au paiement'; }
-    } catch { alert('Erreur de connexion.'); btnPay.disabled=false; btnPay.textContent='❖  Procéder au paiement'; }
-  }
-
-  function checkPaymentReturn() {
-    if (new URLSearchParams(window.location.search).get('commande') !== 'ok') return;
-    const savedIds = JSON.parse(sessionStorage.getItem('lappart_cart')||'[]');
-    if (!savedIds.length) return;
-    const achetés = savedIds.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
+  function checkPaymentReturn(){
+    if(new URLSearchParams(window.location.search).get('commande')!=='ok')return;
+    const savedIds=JSON.parse(sessionStorage.getItem('lappart_cart')||'[]');if(!savedIds.length)return;
+    const achetés=savedIds.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
     sessionStorage.removeItem('lappart_cart');
-    document.getElementById('success-codes').innerHTML = achetés.map((p,i) => `
-      <div class="code-card" style="animation-delay:${i*0.12}s">
-        <div class="code-product">${p.emoji||'🛒'} ${p.name}</div>
-        <div class="code-label">Code Tiroir N° ${p.tiroir}</div>
-        <div class="code-value">${p.code}</div>
-      </div>`).join('');
-    document.getElementById('success-screen').classList.add('show');
-    window.history.replaceState({},'','/');
+    document.getElementById('success-codes').innerHTML=achetés.map((p,i)=>'<div class="code-card" style="animation-delay:'+i*0.12+'s"><div class="code-product">'+(p.emoji||'🛒')+' '+p.name+'</div><div class="code-label">Code Tiroir N° '+p.tiroir+'</div><div class="code-value">'+p.code+'</div></div>').join('');
+    document.getElementById('success-screen').classList.add('show');window.history.replaceState({},'','/');
   }
-
-  renderAll();
-  checkPaymentReturn();
+  renderAll();checkPaymentReturn();
 </script>
 </body>
 </html>

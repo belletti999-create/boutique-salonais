@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTEL LIVE — Macro · War · Trump</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060608;--bg2:#0d0d12;--bg3:#13131a;--border:#1e1e2e;--finance:#00e5a0;--finance-dim:rgba(0,229,160,0.08);--war:#ff3b3b;--war-dim:rgba(255,59,59,0.08);--trump:#4fc3f7;--trump-dim:rgba(79,195,247,0.08);--gold:#f0b429;--text:#c8c8d8;--text-dim:#5a5a72;--mono:'Share Tech Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'Inter',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.logo{font-family:var(--display);font-size:26px;letter-spacing:4px;color:#fff}.logo span{color:var(--gold)}
+.header-right{display:flex;align-items:center;gap:16px}
+.live-badge{display:flex;align-items:center;gap:6px;color:var(--finance);font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--finance);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,160,.5)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(0,229,160,0)}}
+#clock{color:var(--text-dim);font-size:12px;font-family:var(--mono)}.free-badge{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--finance);border:1px solid var(--finance);padding:3px 8px;text-transform:uppercase;opacity:.7}
+#refresh-btn{background:none;border:1px solid var(--border);color:var(--gold);font-family:var(--mono);font-size:11px;padding:5px 14px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
+#refresh-btn:hover:not(:disabled){border-color:var(--gold);background:rgba(240,180,41,.08)}#refresh-btn:disabled{opacity:.4;cursor:not-allowed}
+.ticker-bar{background:var(--bg3);border-bottom:1px solid var(--border);overflow:hidden;height:30px;display:flex;align-items:center}
+.ticker-label{background:var(--gold);color:#000;font-family:var(--mono);font-size:10px;font-weight:700;padding:0 10px;height:100%;display:flex;align-items:center;letter-spacing:1px;white-space:nowrap;flex-shrink:0}
+.ticker-track{overflow:hidden;flex:1}.ticker-inner{display:flex;gap:40px;white-space:nowrap;animation:scroll-left 50s linear infinite;font-family:var(--mono);font-size:11px;color:var(--text-dim);padding:0 20px}
+@keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}.ticker-sep{color:var(--border)}
+#notif-container{position:fixed;top:90px;right:20px;z-index:500;display:flex;flex-direction:column;gap:10px;max-width:340px}
+.notif{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px 16px;font-size:11px;font-family:var(--mono);animation:slideIn .3s ease,fadeOut .4s ease 6s forwards;cursor:pointer;line-height:1.5}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes fadeOut{to{opacity:0;transform:translateX(120%)}}
+.notif-finance{border-left-color:var(--finance)}.notif-war{border-left-color:var(--war)}.notif-trump{border-left-color:var(--trump)}
+.notif-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:.6}
+main{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);min-height:calc(100vh - 116px)}.column{background:var(--bg);display:flex;flex-direction:column}
+.col-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);position:sticky;top:56px;background:var(--bg);z-index:10}
+.col-title{font-family:var(--display);font-size:20px;letter-spacing:3px;display:flex;align-items:center;gap:10px}
+.col-subtitle{font-family:var(--mono);font-size:9px;letter-spacing:1px;margin-top:4px;opacity:.45;text-transform:uppercase}
+.col-finance .col-title{color:var(--finance)}.col-war .col-title{color:var(--war)}.col-trump .col-title{color:var(--trump)}
+.col-finance{border-top:2px solid var(--finance)}.col-war{border-top:2px solid var(--war)}.col-trump{border-top:2px solid var(--trump)}
+.col-count{font-family:var(--mono);font-size:9px;margin-top:6px;opacity:.4;letter-spacing:1px}
+.progress-bar{height:2px;background:var(--border);margin-top:10px;border-radius:1px;overflow:hidden}
+.progress-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(0);border-radius:1px}
+.col-finance .progress-fill{background:var(--finance)}.col-war .progress-fill{background:var(--war)}.col-trump .progress-fill{background:var(--trump)}
+.cards-container{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto;max-height:calc(100vh - 220px)}
+.card{background:var(--bg2);border:1px solid var(--border);padding:13px 15px;transition:border-color .2s,background .2s;animation:cardIn .35s ease backwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.col-finance .card:hover{border-color:rgba(0,229,160,.35);background:var(--finance-dim)}.col-war .card:hover{border-color:rgba(255,59,59,.35);background:var(--war-dim)}.col-trump .card:hover{border-color:rgba(79,195,247,.35);background:var(--trump-dim)}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.card-source{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.5}.card-time{font-family:var(--mono);font-size:9px;opacity:.4;white-space:nowrap}
+.card-title{font-size:12.5px;font-weight:500;color:#dde0f0;line-height:1.45;margin-bottom:6px}.card-title a{color:inherit;text-decoration:none}.card-title a:hover{color:#fff}
+.card-summary{font-size:11px;color:var(--text-dim);line-height:1.6}
+.skeleton{background:var(--bg2);border:1px solid var(--border);padding:13px 15px;animation:shimmer 1.6s infinite}@keyframes shimmer{0%,100%{opacity:.35}50%{opacity:.65}}
+.skel-line{height:9px;background:var(--border);border-radius:2px;margin-bottom:8px}.skel-line.s{width:45%}.skel-line.m{width:78%}.skel-line.l{width:100%}
+.error-card{background:rgba(255,59,59,.05);border:1px solid rgba(255,59,59,.2);padding:16px;font-family:var(--mono);font-size:10px;color:var(--war);line-height:1.8}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:9px 24px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-dim)}
+#next-refresh{color:var(--gold)}.cards-container::-webkit-scrollbar{width:3px}.cards-container::-webkit-scrollbar-track{background:var(--bg)}.cards-container::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+@media(max-width:900px){main{grid-template-columns:1fr}.cards-container{max-height:none}.col-header{top:56px}}
+</style></head><body>
+<header><div class="logo">INTEL<span>LIVE</span></div><div class="header-right"><div class="live-badge"><div class="live-dot"></div>LIVE</div><div class="free-badge">✦ GRATUIT</div><div id="clock">--:--:--</div><button id="refresh-btn" onclick="refreshAll()">↻ REFRESH</button></div></header>
+<div class="ticker-bar"><div class="ticker-label">▶ SOURCES RSS</div><div class="ticker-track"><div class="ticker-inner"><span style="color:var(--finance)">Reuters Business</span><span class="ticker-sep">//</span><span style="color:var(--finance)">Yahoo Finance</span><span class="ticker-sep">//</span><span style="color:var(--finance)">MarketWatch</span><span class="ticker-sep">//</span><span style="color:var(--war)">Reuters World</span><span class="ticker-sep">//</span><span style="color:var(--war)">BBC World</span><span class="ticker-sep">//</span><span style="color:var(--war)">Al Jazeera</span><span class="ticker-sep">//</span><span style="color:var(--trump)">Reuters Politics</span><span class="ticker-sep">//</span><span style="color:var(--trump)">Politico</span><span class="ticker-sep">//</span><span style="color:var(--trump)">The Hill</span><span class="ticker-sep">////</span><span style="color:var(--finance)">Reuters Business</span><span class="ticker-sep">//</span><span style="color:var(--finance)">Yahoo Finance</span><span class="ticker-sep">//</span><span style="color:var(--finance)">MarketWatch</span><span class="ticker-sep">//</span><span style="color:var(--war)">Reuters World</span><span class="ticker-sep">//</span><span style="color:var(--war)">BBC World</span><span class="ticker-sep">//</span><span style="color:var(--war)">Al Jazeera</span><span class="ticker-sep">//</span><span style="color:var(--trump)">Reuters Politics</span><span class="ticker-sep">//</span><span style="color:var(--trump)">Politico</span><span class="ticker-sep">//</span><span style="color:var(--trump)">The Hill</span></div></div></div>
+<div id="notif-container"></div>
+<main><div class="column col-finance"><div class="col-header"><div class="col-title"><span>📈</span> MACRO · FINANCE</div><div class="col-subtitle">Reuters · Yahoo Finance · MarketWatch</div><div class="col-count" id="count-finance">Chargement...</div><div class="progress-bar"><div class="progress-fill" id="prog-finance"></div></div></div><div class="cards-container" id="col-finance"></div></div><div class="column col-war"><div class="col-header"><div class="col-title"><span>⚔️</span> GUERRE · GÉO</div><div class="col-subtitle">Reuters · BBC · Al Jazeera</div><div class="col-count" id="count-war">Chargement...</div><div class="progress-bar"><div class="progress-fill" id="prog-war"></div></div></div><div class="cards-container" id="col-war"></div></div><div class="column col-trump"><div class="col-header"><div class="col-title"><span>🇺🇸</span> TRUMP · US POL</div><div class="col-subtitle">Reuters · Politico · The Hill</div><div class="col-count" id="count-trump">Chargement...</div><div class="progress-bar"><div class="progress-fill" id="prog-trump"></div></div></div><div class="cards-container" id="col-trump"></div></div></main>
+<footer><span>INTEL<span style="color:var(--gold)">LIVE</span> · RSS · 100% Gratuit</span><span>Prochain refresh : <span id="next-refresh">--:--</span></span></footer>
+<script>
+const PROXY='https://api.rss2json.com/v1/api.json?rss_url=';
+const FEEDS={finance:[{url:'https://feeds.reuters.com/reuters/businessNews',source:'Reuters Business'},{url:'https://feeds.content.dowjones.io/public/rss/mw_topstories',source:'MarketWatch'},{url:'https://finance.yahoo.com/news/rssindex',source:'Yahoo Finance'}],war:[{url:'https://feeds.reuters.com/Reuters/worldNews',source:'Reuters World'},{url:'https://feeds.bbci.co.uk/news/world/rss.xml',source:'BBC World'},{url:'https://www.aljazeera.com/xml/rss/all.xml',source:'Al Jazeera'}],trump:[{url:'https://feeds.reuters.com/Reuters/PoliticsNews',source:'Reuters Politics'},{url:'https://rss.politico.com/politics-news.xml',source:'Politico'},{url:'https://thehill.com/rss/syndicator/19109',source:'The Hill'}]};
+const TKW=['trump','donald','white house','maga','tariff','tariffs','executive order','mar-a-lago','doge','musk','elon','trade war','immigration'];
+const WKW=['war','attack','conflict','troops','ukraine','russia','israel','gaza','iran','nato','china','taiwan','missile','strike','ceasefire','military'];
+const FKW=['fed','ecb','rate','inflation','gdp','market','stock','bond','yield','dollar','economy','recession','gold','nasdaq','s&p','tariff','oil'];
+function timeAgo(d){if(!d)return'';const t=(Date.now()-new Date(d))/1000;if(t<60)return"a l'instant";if(t<3600)return'il y a '+Math.floor(t/60)+'min';if(t<86400)return'il y a '+Math.floor(t/3600)+'h';return'il y a '+Math.floor(t/86400)+'j'}
+function strip(h){const d=document.createElement('div');d.innerHTML=h||'';return d.textContent.replace(/s+/g,' ').trim().substring(0,160)}
+function score(t,d,k){return k.filter(w=>(t+' '+d).toLowerCase().includes(w)).length}
+function updClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('fr-FR',{hour12:false})}
+setInterval(updClock,1000);updClock();
+function animProg(id,dur){const e=document.getElementById(id);if(!e)return;e.style.transition='none';e.style.transform='scaleX(0)';setTimeout(()=>{e.style.transition='transform '+dur+'ms linear';e.style.transform='scaleX(1)'},50)}
+let cd=300,cdT;
+function startCD(){clearInterval(cdT);cd=300;cdT=setInterval(()=>{cd--;const m=Math.floor(cd/60).toString().padStart(2,'0'),s=(cd%60).toString().padStart(2,'0');document.getElementById('next-refresh').textContent=m+':'+s;if(cd<=0){clearInterval(cdT);refreshAll()}},1000)}
+let notifS=new Set();
+function notif(tit,src,type){if(notifS.has(tit))return;notifS.add(tit);const c=document.getElementById('notif-container'),n=document.createElement('div');n.className='notif notif-'+type;const L={finance:'📈 FINANCE',war:'⚔️ GEOPOL',trump:'🇺🇸 TRUMP'};n.innerHTML='<div class="notif-label">'+L[type]+' · '+src+'</div>'+tit.substring(0,100);c.prepend(n);if(c.children.length>4)c.lastChild.remove();setTimeout(()=>n.remove(),6500)}
+function skels(id){document.getElementById(id).innerHTML=Array(5).fill('<div class="skeleton"><div class="skel-line s"></div><div class="skel-line l"></div><div class="skel-line m"></div></div>').join('')}
+function renderC(id,items,type,cid){const c=document.getElementById(id);document.getElementById(cid).textContent=items.length+' articles';if(!items.length){c.innerHTML='<div class="error-card">Aucun article disponible.</div>';return}c.innerHTML='';items.forEach((it,i)=>{const d=document.createElement('div');d.className='card';d.style.animationDelay=(i*60)+'ms';const sum=strip(it.description||'');d.innerHTML='<div class="card-meta"><span class="card-source">'+it.source+'</span><span class="card-time">'+timeAgo(it.pubDate)+'</span></div><div class="card-title"><a href="'+it.link+'" target="_blank" rel="noopener">'+it.title+'</a></div>'+(sum?'<div class="card-summary">'+sum+'</div>':'');c.appendChild(d)});if(items[0])notif(items[0].title,items[0].source,type)}
+function renderErr(id,cid,msg){document.getElementById(id).innerHTML='<div class="error-card">⚠ '+msg+'</div>';document.getElementById(cid).textContent='erreur'}
+async function fetchF(url,src){const res=await fetch(PROXY+encodeURIComponent(url)+'&count=20');if(!res.ok)throw new Error('HTTP '+res.status);const d=await res.json();if(d.status!=='ok')throw new Error(d.message||'Erreur RSS');return(d.items||[]).map(i=>({...i,source:src}))}
+async function fetchCol(type){const res=await Promise.allSettled(FEEDS[type].map(f=>fetchF(f.url,f.source)));let all=[];res.forEach(r=>{r.status==='fulfilled'&&(all=all.concat(r.value))});if(!all.length)throw new Error('Tous les flux ont echoue');if(type==='trump')all=all.filter(i=>TKW.some(k=>(i.title+' '+(i.description||'')).toLowerCase().includes(k)));const kw=type==='finance'?FKW:type==='war'?WKW:TKW;all=all.map(i=>({...i,sc:score(i.title,i.description||'',kw),ts:new Date(i.pubDate||0).getTime()})).sort((a,b)=>Math.abs(b.sc-a.sc)>2?b.sc-a.sc:b.ts-a.ts);const seen=new Set();return all.filter(i=>{const k=i.title.toLowerCase().substring(0,50);if(seen.has(k))return false;seen.add(k);return true}).slice(0,15)}
+let isRef=false;
+async function refreshAll(){if(isRef)return;isRef=true;const b=document.getElementById('refresh-btn');b.disabled=true;b.textContent='⟳ EN COURS...';['col-finance','col-war','col-trump'].forEach(skels);animProg('prog-finance',5000);animProg('prog-war',6000);animProg('prog-trump',5500);const tasks=[{type:'finance',id:'col-finance',cid:'count-finance'},{type:'war',id:'col-war',cid:'count-war'},{type:'trump',id:'col-trump',cid:'count-trump'}];const res=await Promise.allSettled(tasks.map(t=>fetchCol(t.type)));res.forEach((r,i)=>{const t=tasks[i];r.status==='fulfilled'?renderC(t.id,r.value,t.type,t.cid):renderErr(t.id,t.cid,r.reason&&r.reason.message||'Erreur')});b.disabled=false;b.textContent='↻ REFRESH';isRef=false;startCD()}
+refreshAll();
+</script></body></html>

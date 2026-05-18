@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventaire Minibar — L'Appart Salonais</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #e8d5a3;
+    --gold-dim: rgba(201,168,76,0.25);
+    --dark: #111;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #ddd;
+    --bg-cat: #f9f6ef;
+    --bg-row-hover: #fdfaf4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f4f1ea;
+    color: var(--text);
+    padding: 2rem;
+    min-height: 100vh;
+  }
+
+  .page {
+    background: #fff;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2.5rem 2rem;
+    border-top: 4px solid var(--gold);
+    box-shadow: 0 2px 32px rgba(0,0,0,0.10);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 1.25rem;
+    border-bottom: 1.5px solid var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .header-left { display: flex; flex-direction: column; gap: 4px; }
+
+  .property-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    line-height: 1;
+  }
+
+  .property-sub {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .header-right .date-val {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 12px;
+  }
+
+  .sig-line {
+    display: inline-block;
+    width: 140px;
+    border-bottom: 1px solid var(--border);
+    margin-left: 6px;
+    vertical-align: bottom;
+  }
+
+  /* ── TOOLBAR (screen only) ── */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: #fdf8ee; }
+
+  .btn-secondary {
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .btn-secondary:hover { background: #f9f9f9; }
+
+  .btn-print {
+    margin-left: auto;
+    border-color: var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-print svg { width: 14px; height: 14px; }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    border-bottom: 1.5px solid var(--gold);
+  }
+
+  thead th {
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 8px 10px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  thead th.center { text-align: center; }
+
+  /* Category separator */
+  tr.cat-row td {
+    background: var(--bg-cat);
+    border-top: 1px solid var(--gold-dim);
+    border-bottom: 1px solid var(--gold-dim);
+    padding: 6px 10px;
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* Data rows */
+  tr.data-row td {
+    border-bottom: 0.5px solid #ececec;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  tr.data-row:hover td { background: var(--bg-row-hover); }
+
+  td input[type="text"],
+  td input[type="number"] {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: var(--text);
+    padding: 9px 10px;
+    outline: none;
+  }
+
+  td input[type="number"] {
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+  td input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  td.detail-cell input { font-size: 10px; color: var(--muted); }
+  td.price-cell { font-size: 11px; color: var(--muted); padding: 9px 10px; white-space: nowrap; }
+  td.check-cell { text-align: center; padding: 9px 10px; }
+  td.del-cell { padding: 0 4px; }
+
+  .checkbox {
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+    transition: border-color 0.15s;
+  }
+  .checkbox:hover { border-color: var(--gold); }
+  .checkbox.checked { border-color: var(--gold); }
+  .checkbox.checked::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 6px; height: 10px;
+    border-right: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    transform: rotate(40deg);
+  }
+
+  .btn-del {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    padding: 6px 8px;
+    font-size: 14px;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .btn-del:hover { color: #e74c3c; }
+
+  /* ── FOOTER ── */
+  .inv-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 0.5px solid #ddd;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .inv-footer .ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  .stats strong { color: var(--text); }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; padding: 1.5rem 1.5rem 1rem; border-top: 3px solid var(--gold); }
+    .toolbar { display: none !important; }
+    .btn-del { display: none !important; }
+    td input { pointer-events: none; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  @page {
+    margin: 1.2cm;
+    size: A4;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="property-name">L'Appart Salonais</div>
+      <div class="property-sub">Inventaire · Boutique Minibar</div>
+    </div>
+    <div class="header-right">
+      <div class="date-val" id="dateDisp"></div>
+      <div>Vérifié par <span class="sig-line"></span></div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <button class="btn" onclick="addRow()">+ Ajouter un article</button>
+    <button class="btn btn-secondary" onclick="resetAll()">↺ Réinitialiser les stocks</button>
+    <button class="btn btn-print" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      Imprimer / PDF
+    </button>
+  </div>
+
+  <!-- TABLE -->
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Article</th>
+        <th style="width:18%">Détail / Contenu</th>
+        <th style="width:8%">Prix</th>
+        <th class="center" style="width:10%">Stock<br>actuel</th>
+        <th class="center" style="width:10%">Stock<br>min.</th>
+        <th class="center" style="width:10%">À<br>commander</th>
+        <th class="center" style="width:6%">OK</th>
+        <th style="width:8%"></th>
+      </tr>
+    </thead>
+    <tbody id="invBody"></tbody>
+  </table>
+
+  <!-- FOOTER -->
+  <div class="inv-footer">
+    <div class="stats">Articles : <strong id="totalCount">0</strong>&nbsp;&nbsp;·&nbsp;&nbsp;À réapprovisionner : <strong id="needCount">0</strong></div>
+    <div class="ornament">✦</div>
+    <div>L'Appart Salonais · Salon-de-Provence</div>
+  </div>
+
+</div>
+
+<script>
+const ITEMS = [
+  { type: 'cat', label: '🥤  BOISSONS' },
+  { article: 'Coca-Cola',           detail: 'Pack 2 canettes 33cl',           prix: '2,99 €', stock: '', min: 2,  cmd: '', ok: false },
+  { article: 'Eau Pétillante',      detail: 'Pack 2 bouteilles Perugino 50cl', prix: '2,50 €', stock: '', min: 2,  cmd: '', ok: false },
+  { article: 'Eau Plate',           detail: 'Bouteille 50cl',                  prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Red Bull',            detail: 'Pack 2 canettes 25cl',            prix: '4,99 €', stock: '', min: 2,  cmd: '', ok: false },
+  { article: 'Powerade Ice Storm',  detail: 'Pack 2 bouteilles 50cl',          prix: '3,99 €', stock: '', min: 2,  cmd: '', ok: false },
+  { article: 'Lait',                detail: 'Briquette individuelle',          prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+
+  { type: 'cat', label: '🍿  SNACKS' },
+  { article: 'Chips',               detail: 'Vico Classique Nature 150g',      prix: '2,50 €', stock: '', min: 2,  cmd: '', ok: false },
+  { article: "M&M's Peanut",        detail: "M&M's Peanut 250g",              prix: '5,00 €', stock: '', min: 2,  cmd: '', ok: false },
+  { article: 'Bonbons',             detail: '',                                prix: '',       stock: '', min: 2,  cmd: '', ok: false },
+  { article: 'Maïs / Popcorn',      detail: '',                                prix: '',       stock: '', min: 2,  cmd: '', ok: false },
+
+  { type: 'cat', label: '🥐  PETIT DÉJEUNER' },
+  { article: 'Jus de Fruit PAGO',           detail: '',                        prix: '',       stock: '', min: 1,  cmd: '', ok: false },
+  { article: 'Céréales Muesli',             detail: '',                        prix: '',       stock: '', min: 1,  cmd: '', ok: false },
+  { article: 'Céréales Chocapic',           detail: '',                        prix: '',       stock: '', min: 1,  cmd: '', ok: false },
+  { article: 'Madeleines',                  detail: '',                        prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Nutella (portion individuelle)', detail: '',                      prix: '',       stock: '', min: 6,  cmd: '', ok: false },
+  { article: 'Confiture Fraise',            detail: 'Portion individuelle',    prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Confiture Myrtille',          detail: 'Portion individuelle',    prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Confiture Abricot',           detail: 'Portion individuelle',    prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Biscottes',                   detail: '',                        prix: '',       stock: '', min: 1,  cmd: '', ok: false },
+  { article: 'Beurre',                      detail: 'Portion individuelle',    prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Café',                        detail: 'Dosettes / Capsules',     prix: '',       stock: '', min: 4,  cmd: '', ok: false },
+  { article: 'Sucre',                       detail: 'Sachets individuels',     prix: '',       stock: '', min: 10, cmd: '', ok: false },
+
+  { type: 'cat', label: '🛁  CONFORT & COMMODITÉS' },
+  { article: 'Papier WC',  detail: 'Rouleaux',          prix: '', stock: '', min: 4, cmd: '', ok: false },
+  { article: 'Chausson',   detail: 'Paires (taille unique)', prix: '', stock: '', min: 2, cmd: '', ok: false },
+];
+
+let rows = JSON.parse(JSON.stringify(ITEMS));
+
+function render() {
+  const tbody = document.getElementById('invBody');
+  tbody.innerHTML = '';
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    if (r.type === 'cat') {
+      tr.className = 'cat-row';
+      tr.innerHTML = `<td colspan="8">${r.label}</td>`;
+    } else {
+      tr.className = 'data-row';
+      tr.innerHTML = `
+        <td><input type="text" value="${r.article}" placeholder="Nom de l'article…" oninput="rows[${i}].article=this.value;updateFooter()"></td>
+        <td class="detail-cell"><input type="text" value="${r.detail}" placeholder="—" oninput="rows[${i}].detail=this.value"></td>
+        <td class="price-cell">${r.prix || ''}</td>
+        <td style="text-align:center"><input type="number" min="0" placeholder="—" value="${r.stock}" oninput="rows[${i}].stock=this.value;updateFooter()"></td>
+        <td style="text-align:center"><input type="number" min="0" value="${r.min}" oninput="rows[${i}].min=this.value;updateFooter()"></td>
+        <td style="text-align:center"><input type="number" min="0" placeholder="—" value="${r.cmd}" oninput="rows[${i}].cmd=this.value"></td>
+        <td class="check-cell"><div class="checkbox ${r.ok?'checked':''}" onclick="rows[${i}].ok=!rows[${i}].ok;this.classList.toggle('checked')"></div></td>
+        <td class="del-cell"><button class="btn-del" onclick="rows.splice(${i},1);render()" title="Supprimer">✕</button></td>
+      `;
+    }
+    tbody.appendChild(tr);
+  });
+  updateFooter();
+}
+
+function updateFooter() {
+  const data = rows.filter(r => !r.type && r.article.trim());
+  const need = data.filter(r => { const s=parseInt(r.stock),m=parseInt(r.min); return !isNaN(s)&&!isNaN(m)&&s<m; }).length;
+  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('needCount').textContent = need;
+}
+
+function addRow() {
+  rows.push({ article: '', detail: '', prix: '', stock: '', min: '', cmd: '', ok: false });
+  render();
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('#invBody tr.data-row:last-child td:first-child input');
+    if (inputs.length) inputs[inputs.length-1].focus();
+  }, 50);
+}
+
+function resetAll() {
+  if (!confirm('Remettre tous les stocks à zéro ?')) return;
+  rows.forEach(r => { if (!r.type) { r.stock = ''; r.cmd = ''; r.ok = false; } });
+  render();
+}
+
+const now = new Date();
+document.getElementById('dateDisp').textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+render();
+</script>
+</body>
+</html>

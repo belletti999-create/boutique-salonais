@@ -231,7 +231,10 @@ async function checkout(){
   btnPay.disabled=true;btnPay.textContent='Chargement…';
   sessionStorage.setItem('lappart_cart',JSON.stringify(keys.map(id=>+id)));
   sessionStorage.setItem('lappart_email',email);
-  const items=keys.map(id=>{const p=PRODUCTS.find(x=>x.id===+id);return{name:p.name,price:p.price,quantity:1};});
+  const items = keys.map(id => {
+  const p = PRODUCTS.find(x => x.id === +id);
+  return { name: p.name, emoji: p.emoji || '🛒', price: p.price, tiroir: p.tiroir, code: p.code, quantity: 1 };
+});
   try{const res=await fetch('/.netlify/functions/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items,email})});const data=await res.json();if(data.url){window.location.href=data.url;}else{alert('Erreur de paiement. Veuillez réessayer.');btnPay.disabled=false;btnPay.textContent='❖ Procéder au paiement';}}
   catch{alert('Erreur de connexion.');btnPay.disabled=false;btnPay.textContent='❖ Procéder au paiement';}
 }

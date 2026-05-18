@@ -2,15 +2,13 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
-
   const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
   if (!STRIPE_SECRET_KEY) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Stripe non configuré' }) };
   }
-
-  let items;
+  let items, email;
   try {
-    ({ items } = JSON.parse(event.body));
+    ({ items, email } = JSON.parse(event.body));
   } catch {
     return { statusCode: 400, body: JSON.stringify({ error: 'Requête invalide' }) };
   }
@@ -19,6 +17,12 @@ exports.handler = async (event) => {
   body.append('mode', 'payment');
   body.append('success_url', process.env.URL + '?commande=ok');
   body.append('cancel_url', process.env.URL);
+
+  // Stocker les codes tiroir + email dans les métadonnées
+  body.append('metadata[items]', JSON.stringify(
+    items.map(i => ({ name: i.name, emoji: i.emoji, tiroir: i.tiroir, code: i.code }))
+  ));
+  if (email) body.append('metadata[email]', email);
 
   items.forEach((item, i) => {
     body.append(`line_items[${i}][price_data][currency]`, 'eur');
@@ -35,9 +39,7 @@ exports.handler = async (event) => {
     },
     body: body.toString(),
   });
-
   const session = await response.json();
-
   if (session.url) {
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
   } else {
